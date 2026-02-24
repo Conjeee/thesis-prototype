@@ -41,12 +41,3 @@ dist/
 # --- OS Specific ---
 .DS_Store
 Thumbs.db
-
-# --- Streamlit (Dashboard) ---
-# Streamlit secrets are stored here locally
-.streamlit/secrets.toml
-
-# --- Local Data (Optional) ---
-# If you run the script locally and it saves JSONs before upload
-data/
-logs/
