@@ -1,0 +1,18 @@
+[project]
+name = "thesis-prototype"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "gradio>=6.6.0",
+    "numpy>=2.4.2",
+    "onnxruntime>=1.24.2",
+    "opencv-python-headless>=4.13.0.92",
+]
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.19.0",
+    "ultralytics>=8.4.14",
+]
