@@ -4,13 +4,13 @@ from pathlib import Path
 
 def get_resource_path(relative_path: str) -> Path:
     """
-
+    Safely locate a file path.
     
     Args:
-        relatice_path (str): _description_
+        relative_path (str):  Path of the file relative to the base file.
 
     Returns:
-        Path: _description_
+        Path: The absolute path of the file.
     """
     
     try:
