@@ -3,11 +3,12 @@ import json
 import numpy as np
 import onnxruntime as ort
 from typing import Tuple, List
-from src import get_resource_path
+from .resource_utils import get_resource_path
+from .config import Config
 
 class TrashDetector:
-    def __init__(self, model_name: str = "thesis_model.onnx", labels_name: str = "class_labels.json"):
-        """
+    def __init__(self, model_name: str = f"{Config.MODEL_NAME}", labels_name: str = f"{Config.LABELS_NAME}"):
+        """ß
         Initializes the path, loads the labels, starts the ONNX session, and extracts model metadata
 
         Args:

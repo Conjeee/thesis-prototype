@@ -1,40 +1,46 @@
 import gradio as gr
+from .inference import TrashDetector
 
-
-def create_ui(interference_callback):
+def build_ui(detector: TrashDetector) -> gr.Blocks:
     """
-    Builds the gradio interface. 
-    
+    Creates the UI.
+
     Args:
-        interference_callback (_type_): Function that will handle the ONNX processing.
+        detector (TrashDetector): Logic from the main inference logic.
+
+    Returns:
+        gr.Blocks: Gradio block containing the frontend.
     """
     
-    with gr.Blocks(title="Model UI", theme=gr.themes.Soft()) as app:
-        gr.Markdown("# Model UI")
-        gr.Markdown("Upload an image below to detect objects.")
+    with gr.Blocks(title="Trash Object Detection", theme=gr.themes.Soft()) as app:
+        gr.Markdown("Local Trash Object Detection")
+        gr.Markdown("Upload an image to detect trash")
         
         with gr.Row():
+            with gr.Column():
+                input_image = gr.Image(type="numpy", label="Upload Image (JPG/PNG)")
+                
+                with gr.Accordion("Advanved settings", open=False):
+                    conf_slider = gr.Slider(minimum=0.1, maximum=1.0, value=.5, label="Confidence Threshold")
+                    iou_slider = gr.Slider(minimum=0.1, maximum=1.0, value=.4, label="IOU Threshold")
+                    
+                detect_btn = gr.Button("Detect Trash", variant="primary")
+                
+            with gr.Column():
+                output_image = gr.AnnotatedImage(label="Detection Results")
+                
             
-            # Left Column
-            with gr.Column():
-                input_image = gr.Image(
-                    type="numpy",
-                    label="1. Drag and drop an image here (JPG/PNG)"
-                )
-                detect_button = gr.Button("Detect Objects", variant="primary")
+            def process_image(img, conf, iou):
+                if img is None:
+                    return None
                 
-            # Right Column
-            with gr.Column():
-                
-                output_image = gr.AnnotatedImage(
-                    label="2. Detection Results",
-                    color_map={"Object": "#ff9900"}
-                )
-                
-        detect_button.click(
-            fn=interference_callback,
-            inputs=input_image,
-            outputs=output_image
-        )
-        
-    return app
+                image, annotations = detector.predict(img, conf_threshold=conf, iou_threshold=iou)
+                return (image, annotations)
+            
+            detect_btn.click(
+                fn=process_image,
+                inputs=[input_image, conf_slider, iou_slider],
+                outputs=[output_image]
+            )
+            
+        return app
