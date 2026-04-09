@@ -1,7 +1,5 @@
 import sys
 from pathlib import Path
-from ultralytics import YOLO
-from .config import Config
 
 
 def get_resource_path(relative_path: str) -> Path:
@@ -22,12 +20,3 @@ def get_resource_path(relative_path: str) -> Path:
         base_path = Path(__file__).resolve().parent.parent
         
     return base_path/relative_path
-
-
-def pt_to_onnx(model_location: str = Config.MODEL_PATH):
-    model = YOLO(model_location)
-    model.export(format="onnx")
-    
-    
-if __name__=="__main__":
-    pt_to_onnx()
